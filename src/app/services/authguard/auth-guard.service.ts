@@ -32,7 +32,14 @@ export class AuthGuardService implements CanActivate {
     if (this.userlist) {
       let name = this.userlist.name;
       if (typeof name !== "undefined" && name !== null) {
-        this.updateNotification();
+        //alert(localStorage.getItem("push_token_update"));
+
+        if (localStorage.getItem("push_token_update") == "0") {
+          if (localStorage.getItem("push_token")) {
+            this.updateNotification();
+          }
+        }
+
         return true;
       }
       //console.log(this.userlist);
@@ -45,23 +52,34 @@ export class AuthGuardService implements CanActivate {
 
   updateNotification() {
     //console.log(this.platform.platforms());
-    var req = {
-      login_id: this.userlist.userId,
-    };
 
-    if (this.platform.is("android")) {
-      req["google_token_android"] = localStorage.getItem("push_token");
+    if (localStorage.getItem("push_token_update") == "0") {
+      if (localStorage.getItem("push_token")) {
+        var req = {
+          user_id: this.userlist.user_id,
+        };
+
+        if (this.platform.is("android")) {
+          req["google_token_android"] = localStorage.getItem("push_token");
+        }
+
+        if (this.platform.is("ios")) {
+          req["google_token_ios"] = localStorage.getItem("push_token");
+        }
+
+        //alert(JSON.stringify(req));
+
+        this.service.updatePushNotification(req).then((result) => {
+          var resultdata: any;
+          resultdata = result;
+
+          if (resultdata.httpcode == 200) {
+            //alert(localStorage.getItem("push_token"));
+            localStorage.setItem("push_token_update", "1");
+          }
+        });
+      }
     }
-
-    if (this.platform.is("ios")) {
-      req["google_token_ios"] = localStorage.getItem("push_token");
-    }
-
-    //console.log(req);
-
-    //this.service.presentToast(localStorage.getItem("push_token"));
-
-    this.service.updatePushNotification(req).then((result) => {});
   }
 
   logoutupdateNotification() {

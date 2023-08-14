@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { Platform, AlertController } from "@ionic/angular";
+import { Platform, AlertController, ModalController } from "@ionic/angular";
 import { SplashScreen } from "@ionic-native/splash-screen/ngx";
 import { StatusBar } from "@ionic-native/status-bar/ngx";
 import { LocalNotifications } from "@ionic-native/local-notifications/ngx";
@@ -19,6 +19,8 @@ const { PushNotifications, Network } = Plugins;
 // import 'firebase/firestore';
 
 import { AIREIService } from "src/app/api/api.service";
+
+import { SplashPage } from "./splash/splash.page";
 
 @Component({
   selector: "app-root",
@@ -64,6 +66,7 @@ export class AppComponent implements OnInit {
     private commonservice: AIREIService,
     private platform: Platform,
     private alertController: AlertController,
+    private modalCtrl: ModalController,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     private localNotifications: LocalNotifications,
@@ -90,7 +93,9 @@ export class AppComponent implements OnInit {
   initializeApp() {
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
-      this.splashScreen.hide();
+
+      //this.splashScreen.hide();
+
       // firebase.initializeApp(environment.firebase);
 
       this.platform.backButton.subscribeWithPriority(9999, () => {
@@ -103,6 +108,10 @@ export class AppComponent implements OnInit {
       this.platform.pause.subscribe((result) => {
         //Background
       });
+
+      if (localStorage.getItem("userlist") == null) {
+        this.router.navigateByUrl("splash");
+      }
     });
   }
 
@@ -142,7 +151,24 @@ export class AppComponent implements OnInit {
       if (val.connected) {
         //ref.commonservice.presentToast("Network Connected");
       } else {
-        ref.commonservice.presentToast("Network Disconnected");
+        //ref.commonservice.presentToast("Network Disconnected");
+        //ref.nointernetconnectionalert();
+
+        if (
+          typeof localStorage.getItem("userlist") !== "undefined" &&
+          localStorage.getItem("userlist") !== null
+        ) {
+          if (
+            JSON.parse(localStorage.getItem("userlist")).language == "English"
+          ) {
+            ref.commonservice.presentToast("Network Disconnected");
+          } else {
+            ref.commonservice.presentToast("Tiada Sambungan Rangkaian");
+          }
+        } else {
+          ref.commonservice.presentToast("Network Disconnected");
+        }
+
         ref.nointernetconnectionalert();
       }
     });
@@ -170,6 +196,8 @@ export class AppComponent implements OnInit {
       "registration",
       (token: PushNotificationToken) => {
         localStorage.setItem("push_token", token.value);
+
+        localStorage.setItem("push_token_update", "0");
 
         localStorage.setItem("badge_count", "0");
         //alert("Push registration success, token: " + token.value);
@@ -222,37 +250,8 @@ export class AppComponent implements OnInit {
           redirectpage = JSON.stringify(data.redirect);
         }
 
-        //alert(redirectpage);
-
         if (localStorage.getItem("userlist") != null) {
-          var designationid = JSON.parse(
-            localStorage.getItem("userlist")
-          ).desigId;
-
-          if (
-            designationid == "3" ||
-            designationid == "5" ||
-            designationid == "11" ||
-            designationid == "7" ||
-            designationid == "8" ||
-            designationid == "9"
-          ) {
-            this.router.navigate(["/segregatenotification"]);
-          } else if (
-            designationid == "2" ||
-            designationid == "4" ||
-            designationid == "6"
-          ) {
-            if (redirectpage == '"MAINTENANCE"') {
-              this.router.navigate([
-                "/segregatenotification/tabmaintenancenotification",
-              ]);
-            } else {
-              this.router.navigate(["/segregatenotification/tabmillstatus"]);
-            }
-          } else {
-            this.router.navigate(["/segregatenotification"]);
-          }
+          this.router.navigate(["/ceo-notification-screen"]);
         }
       }
     );
@@ -260,6 +259,7 @@ export class AppComponent implements OnInit {
 
   async nointernetconnectionalert() {
     const alert = await this.alertController.create({
+      mode: "md",
       header: this.translate.instant("NETWORKERROR.noconnection"),
       cssClass: "nointernetconnectionalertmessage",
       message: this.translate.instant("NETWORKERROR.errormessage"),
@@ -274,5 +274,16 @@ export class AppComponent implements OnInit {
     });
 
     await alert.present();
+  }
+
+  async splashLoad() {
+    const modal = await this.modalCtrl.create({
+      component: SplashPage,
+      cssClass: "modal-fullscreen",
+    });
+    modal.onDidDismiss().then((data) => {
+      //console.log(data);
+    });
+    return await modal.present();
   }
 }

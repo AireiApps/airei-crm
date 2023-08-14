@@ -1,0 +1,82 @@
+<ion-header>
+  <ion-toolbar class="bg-brown-color">
+    <ion-avatar
+      slot="start">
+      <ion-img
+        class="toolbarimage"
+        src="../../../assets/img/crm.png"
+      ></ion-img>
+    </ion-avatar>
+    <ion-title
+      color="light"
+      mode="ios">Profile</ion-title
+    >
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="row profile" #myElementRef>
+    <div class="col-12">
+      <div class="profile-sidebar">
+        <div class="profile-userpic">
+          <img
+            src="../../assets/img/noimageavailable.png"
+            class="img-responsive"
+          />
+        </div>
+
+        <div class="editprofile-title">
+          {{ 'MORE.updatepofile' | translate}}
+        </div>
+
+        <div class="profile-usertitle" *ngIf="userlist">
+          <div class="profile-usertitle-name">{{userlist.name}}</div>
+        </div>
+
+        <div class="hl4line"></div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div class="profile-content">
+        <div
+          style="text-align: center; padding: 20px"
+          (click)="menu_action('changepassword')"
+        >
+          <div class="changepasswordbg">
+            <ion-icon
+              class="icon changepassword"
+              name="lock-closed-outline"
+            ></ion-icon>
+            <span class="icontext" style="color: #1f75bb">
+              {{ 'MORE.changepassword' | translate}}</span
+            >
+          </div>
+        </div>
+
+        <div
+          style="text-align: center; padding: 0px 20px 20px 20px"
+          (click)="menu_action('logout')"
+        >
+          <div class="logoutbg">
+            <ion-icon class="logouticon" name="log-out-outline"></ion-icon>
+            <span class="icontext" style="color: #1f75bb; font-weight: bold">
+              {{ 'MORE.logout' | translate}}</span
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="center_powerd">{{ 'MORE.poweredby' | translate}}</div>
+
+  <div class="center_powerd" style="margin-top: 10px">
+    <a href="https://airei.com.my" target="_blank">
+      <img
+        style="width: 200px; border-radius: 5px"
+        src="../../assets/img/loginlogo.png"
+        alt="COMPANY"
+    /></a>
+  </div>
+
+</ion-content>

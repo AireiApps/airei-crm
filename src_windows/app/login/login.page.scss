@@ -1,0 +1,153 @@
+ion-toolbar {
+  --background: #ffffff;
+
+  ion-button {
+    text-transform: initial;
+    font-size: 17px;
+  }
+}
+
+.content {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+ion-content {
+  background-color: #ffffff;
+  letter-spacing: 0.04688rem;
+  min-height: 100vh;
+
+  /*.back-blob {
+    z-index: 0;
+    width: 300px;
+    left: -20%;
+    position: absolute;
+    top: 40%;
+  }*/
+
+  #header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    h1 {
+      font-weight: 700;
+      font-size: 16px;
+      color: #ffffff;
+      margin-bottom: 10%;
+    }
+
+    img {
+      width: 280px;
+      height: 140px;
+      //border-radius: 25%;
+      //background-color: #ffffff;
+      display: inline-block;
+    }
+  }
+
+  #form {
+    padding-left: 40px;
+    padding-right: 40px;
+
+    ion-button {
+      --background: none;
+      height: 45px;
+      text-transform: initial;
+
+      border-radius: 6px;
+      border: 1px solid #1f75bb;
+      background-color: #1f75bb;
+      color: #ffffff;
+      font-weight: bold;
+      font-size: 14px;
+      text-shadow: 4px 4px 5px rgb(61, 61, 61);
+      //box-shadow: 1px 2px 2px 0px #1f75bb;
+    }
+  }
+}
+
+.appversion {
+  margin-top: 5px;
+  font-size: 12px;
+  color: #ffffff;
+  text-align: center;
+}
+
+.forgotpassword {
+  font-size: 14px;
+  color: #ffffff;
+  float: right;
+  margin-top: 10px;
+}
+
+ion-item {
+  // -moz-border-radius: 50px;
+  // -webkit-border-radius: 50px;
+
+  --border-radius: 8px;
+  --highlight-height: 0px;
+  --border-width: 1px;
+  --border-color: #1f75bb71;
+  --background: none;
+  --color: #1f75bb;
+
+  ion-input {
+    font-size: 14px;
+    --background: none;
+    //--padding-top: 20px;
+    //--padding-bottom: 15px;
+    //--padding-start: 5px;
+  }
+
+  a {
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    text-decoration: none;
+  }
+}
+
+.disableicon {
+  vertical-align: middle;
+  color: #ffffff71;
+}
+
+.icon {
+  vertical-align: middle;
+  color: #000000;
+}
+
+.copyrights {
+  text-align: center;
+}
+
+/*.language_button {
+  //--background: #747474;
+  --background: #1d2730;
+  font-size: 12px;
+  text-transform: initial;
+  color: #ffffff;
+  background-color: transparent;
+  border-radius: 50px;
+  border: 1px solid #3cd2a5;
+  //box-shadow: 1px 8px 8px 0px #0000000d;
+  box-shadow: 1px 2px 2px 0px #3cd2a5;
+  --box-shadow: none;
+}*/
+
+.language_button {
+  --background: none;
+  width: 90px;
+  height: 30px;
+  text-transform: initial;
+  border-radius: 5px;
+  border: 1px solid #1f75bb;
+  background-color: #1f75bb;
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 12px;
+  text-shadow: 4px 4px 5px rgb(61, 61, 61);
+}

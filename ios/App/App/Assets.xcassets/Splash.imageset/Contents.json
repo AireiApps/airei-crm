@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "MypalmLogo.png",
+      "filename" : "crm.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "MypalmLogo@2x.png",
+      "filename" : "crm@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "MypalmLogo@3x.png",
+      "filename" : "crm@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

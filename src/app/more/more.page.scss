@@ -1,7 +1,7 @@
 .center_powerd {
   text-align: center;
   font-size: 14px;
-  color: #ffffff;
+  color: #000000;
 }
 
 /* Profile container */
@@ -12,7 +12,7 @@
 /* Profile sidebar */
 .profile-sidebar {
   padding: 5px 0 5px 0;
-  /*background-color: #ffffff;
+  /*background-color: #000000;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   transition: 0.3s;
   border-radius: 5px;*/
@@ -42,7 +42,7 @@
 .profile-usertitle-name {
   //text-transform: uppercase;
   //color: #1d2730;
-  color: #ffffff;
+  color: #000000;
   font-size: 16px;
   font-weight: 600;
   margin-bottom: 7px;
@@ -53,7 +53,7 @@
   font-size: 14px;
   margin-top: 10px;
   margin-bottom: 20px;
-  color: #75cafa;
+  color: #1f75bb;
 }
 
 .temperature-title {
@@ -71,7 +71,7 @@
 .profile-usertitle-job {
   //text-transform: uppercase;
   //color: #1d2730;
-  color: #ffffff;
+  color: #000000;
   font-size: 14px;
   //font-weight: 600;
   margin-bottom: 10px;
@@ -104,7 +104,12 @@
 
 .logouticon {
   vertical-align: middle;
-  color: #ff9f0c;
+  color: #1f75bb;
+  //color: red;
+}
+.changepassword {
+  vertical-align: middle;
+  color: #1f75bb;
   //color: red;
 }
 
@@ -126,7 +131,7 @@ ion-icon {
 }
 
 .changepasswordbg {
-  border: 1px solid #ffffff;
+  border: 1px solid #1f75bb;
   padding: 10px;
   margin-left: 35px;
   margin-right: 35px;
@@ -134,7 +139,7 @@ ion-icon {
 }
 
 .logoutbg {
-  border: 1px solid #ff9f0c;
+  border: 1px solid #1f75bb;
   padding: 10px;
   margin-left: 35px;
   margin-right: 35px;
@@ -148,7 +153,7 @@ ion-fab-button {
   //--border-radius: 20px;
   --box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.3),
     0px 1px 3px 1px rgba(0, 0, 0, 0.15);
-  --color: #ffffff;
+  --color: #000;
 }
 
 ion-fab-button::part(native):hover::after {

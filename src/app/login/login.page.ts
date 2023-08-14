@@ -1,18 +1,17 @@
 import { Component, OnInit, ElementRef, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
 import { Location } from "@angular/common";
+import { ScreenOrientation } from "@ionic-native/screen-orientation/ngx";
 import { FormBuilder, FormControl, Validators } from "@angular/forms";
 import { AIREIService } from "../api/api.service";
 import { AppVersion } from "@ionic-native/app-version/ngx";
 import { NativeStorage } from "@ionic-native/native-storage/ngx";
-import { LanguageService } from "src/app/services/language-service/language.service";
 
 import {
   Animation,
   AnimationController,
   PopoverController,
 } from "@ionic/angular";
-import { LanguagePopoverPage } from "src/app/pages/language-popover/language-popover.page";
 import { TranslateService } from "@ngx-translate/core";
 
 @Component({
@@ -23,34 +22,35 @@ import { TranslateService } from "@ngx-translate/core";
 export class LoginPage implements OnInit {
   @ViewChild("logo", { static: false }) logo: ElementRef;
   @ViewChild("footer", { static: false }) footer: ElementRef;
-
-  @ViewChild("millcodeinput") millcodeInput;
   @ViewChild("usernameinput") usernameInput;
   @ViewChild("passwordinput") passwordInput;
 
-  departmentArr = [];
   app_version = "";
-  registerCredentials = { millcode: "", username: "", password: "" };
+
+  registerCredentials = { username: "", password: "" };
   loginForm;
   userlist = JSON.parse(localStorage.getItem("userlist"));
 
   uiEnable = false;
-  isDisabled = true;
+  isDisabled = false;
+
+  // Password View
+  showPassword = false;
+  passwordIcon = "eye-outline";
 
   constructor(
     private popoverController: PopoverController,
     private translate: TranslateService,
-    private languageService: LanguageService,
     private router: Router,
     private fb: FormBuilder,
     private location: Location,
     private appVersion: AppVersion,
     private service: AIREIService,
     private nativeStorage: NativeStorage,
+    private screenOrientation: ScreenOrientation,
     private animationcontroller: AnimationController
   ) {
     this.loginForm = this.fb.group({
-      millcode: new FormControl("", Validators.required),
       username: new FormControl("", Validators.required),
       password: new FormControl("", Validators.required),
     });
@@ -114,15 +114,6 @@ export class LoginPage implements OnInit {
     );
   }
 
-  onChangeMillCode(event) {
-    if (event.detail.value.length >= 4) {
-      //console.log(event.detail.value);
-      this.getapiurl(event.detail.value);
-    } else {
-      this.isDisabled = true;
-    }
-  }
-
   onKeydown(event, nextfield) {
     if (event.key == "Enter" && nextfield == "username") {
       this.usernameInput.setFocus();
@@ -133,56 +124,31 @@ export class LoginPage implements OnInit {
     }
   }
 
-  getapiurl(value) {
-    //console.log(this.languageService.selected);
+  togglePassword() {
+    /*if (!this.isDisabled) {
+      if (this.loginForm.value.password != "") {
+        this.showPassword = !this.showPassword;
 
-    var req = {
-      millcode: value,
-      version: this.appVersion,
-      language: this.languageService.selected,
-    };
-
-    //console.log(req);
-
-    this.service.millcodeauthentication(req).then((result) => {
-      var resultdata: any;
-      resultdata = result;
-      if (resultdata.httpcode == 200) {
-        this.isDisabled = false;
-        localStorage.setItem("endpoint", String(resultdata.data.javaapiurl));
-      } else {
-        this.isDisabled = true;
-        localStorage.setItem("endpoint", "");
-        this.service.presentToast(
-          this.translate.instant("LOGIN.invalidmillcode")
-        );
+        if (this.passwordIcon == "eye-outline") {
+          this.passwordIcon = "eye-off-outline";
+        } else {
+          this.passwordIcon = "eye-outline";
+        }
       }
-    });
+    }*/
+
+    if (this.loginForm.value.password != "") {
+      this.showPassword = !this.showPassword;
+
+      if (this.passwordIcon == "eye-outline") {
+        this.passwordIcon = "eye-off-outline";
+      } else {
+        this.passwordIcon = "eye-outline";
+      }
+    }
   }
 
   btn_login() {
-    //console.log(this.languageService.selected);
-
-    var selectedlanguageid = "1";
-    var selectedlanguage = "English";
-
-    if (this.languageService.selected == "English") {
-      selectedlanguageid = "1";
-      selectedlanguage = this.languageService.selected;
-    }
-
-    if (this.languageService.selected == "Malay") {
-      selectedlanguageid = "2";
-      selectedlanguage = this.languageService.selected;
-    }
-
-    if (this.loginForm.value.millcode == "") {
-      this.service.presentToast(
-        this.translate.instant("LOGIN.millcodeerrortoast")
-      );
-      return;
-    }
-
     if (this.loginForm.value.username == "") {
       this.service.presentToast(
         this.translate.instant("LOGIN.usernameerrortoast")
@@ -197,20 +163,13 @@ export class LoginPage implements OnInit {
       return;
     }
 
-    if (localStorage.getItem("endpoint") == "") {
-      this.service.presentToast(
-        this.translate.instant("LOGIN.millcodeauthontication")
-      );
-      return;
-    }
+    console.log(localStorage.getItem("endpoint"));
+
+    this.isDisabled = true;
 
     var req = {
-      millcode: this.loginForm.value.millcode,
       username: this.loginForm.value.username,
       password: this.loginForm.value.password,
-      language: this.languageService.selected,
-      languageid: selectedlanguageid,
-      version: this.appVersion,
     };
 
     console.log(req);
@@ -223,11 +182,13 @@ export class LoginPage implements OnInit {
       if (resultdata.httpcode == 200) {
         //this.languageService.setLanguage("Malay");
 
-        //console.log(resultdata.data);
+        console.log(resultdata.data);
 
         localStorage.setItem("userlist", JSON.stringify(resultdata.data));
 
         localStorage.setItem("runninghourid", "0");
+
+        localStorage.setItem("scheduledpopup", "");
 
         localStorage.setItem("profile", "");
 
@@ -247,24 +208,19 @@ export class LoginPage implements OnInit {
         );
 
         setTimeout(() => {
+          this.isDisabled = false;
           this.location.go("/");
           window.location.reload();
           this.router.navigate(["/tabs"]);
         }, 1000);
       } else {
+        console.log(resultdata.data);
+
+        this.isDisabled = false;
+
         this.service.presentToast(resultdata.message);
       }
     });
-  }
-
-  async openLanguagePopOver($event) {
-    //console.log($event);
-
-    const popover = await this.popoverController.create({
-      component: LanguagePopoverPage,
-      event: $event,
-    });
-    await popover.present();
   }
 
   signup() {
